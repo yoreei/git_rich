@@ -4,8 +4,9 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
-#include "UE5TopDownARPGGameMode.generated.h"
+#include "Containers/Set.h"
 
+#include "UE5TopDownARPGGameMode.generated.h"
 
 /** Structure that defines a level up table entry */
 USTRUCT(BlueprintType)
@@ -78,7 +79,6 @@ UCLASS(minimalapi)
 class AUE5TopDownARPGGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
-
 public:
 	AUE5TopDownARPGGameMode();
 
@@ -97,8 +97,13 @@ public:
     void GetRandQuestion(int QuestionLevel, FQuestionData& QuestionData);
 
 public:
+    using QuestionKVPair = TTuple<const FName&, const FQuestionData&>;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = QuestionTable)
     UDataTable* QuestionDataTable;
+
+    /* Keys of questions already answered */
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = QuestionTable)
+    TSet<FName> ShownIds{};
 };
 

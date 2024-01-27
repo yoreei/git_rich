@@ -73,27 +73,31 @@ void AUE5TopDownARPGGameMode::GetRandQuestion(int QuestionLevel, FQuestionData& 
 {
 	if (QuestionLevel <= 0)
 	{
-		UE_LOG(LogUE5TopDownARPG, Warning, TEXT("QuestionLevel must be >= 0"));
+		UE_LOG(LogUE5TopDownARPG, Warning, TEXT("C++: QuestionLevel must be >= 0"));
 		return;
 	}
 
-	TArray<FQuestionData*> AllLevelQuestions{};
+	TArray<QuestionKVPair> AllLevelQuestions{};
 
 	QuestionDataTable->ForeachRow<FQuestionData>(TEXT("ContextString"), [&](const FName& Key, const FQuestionData& Value)
 		{
-			if (Value.QuestionLevel == QuestionLevel)
+			if (Value.QuestionLevel == QuestionLevel && !ShownIds.Contains(Key))
 			{
-				AllLevelQuestions.Add(const_cast<FQuestionData*>(&Value));
+				QuestionKVPair Pair(Key, Value);
+				AllLevelQuestions.Add(Pair);
 			}
 		});
 
 	if (AllLevelQuestions.Num() <= 0)
 	{
-		UE_LOG(LogUE5TopDownARPG, Warning, TEXT("Couldn't find any questions"));
+		UE_LOG(LogUE5TopDownARPG, Warning, TEXT("C++: Couldn't find any questions"));
 		return;
 	}
 	int64 RandIdx = FMath::RandRange(0, 99999) % AllLevelQuestions.Num();
-	UE_LOG(LogUE5TopDownARPG, Log, TEXT("%d of %d"), RandIdx, AllLevelQuestions.Num());
-	QuestionData = *AllLevelQuestions[RandIdx];
-	//ensure(Row);
+	QuestionKVPair Pair = AllLevelQuestions[RandIdx];
+	FName Name = Pair.Get<0>();
+	ShownIds.Add(Name);
+	QuestionData = Pair.Get<1>(); // OUT
+
+	UE_LOG(LogUE5TopDownARPG, Log, TEXT("C++: Found %d viable questions, returning one with Unique Name: %s"), AllLevelQuestions.Num(), *Name.ToString());
 }
