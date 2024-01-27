@@ -96,6 +96,9 @@ public:
     UFUNCTION(BlueprintCallable, Category = "GitRich Functions")
     void GetRandQuestion(int QuestionLevel, FQuestionData& QuestionData);
 
+    UFUNCTION(BlueprintCallable, Category = "GitRich Functions")
+    void ResetShownQuestions();
+
 public:
     using QuestionKVPair = TTuple<const FName&, const FQuestionData&>;
 
