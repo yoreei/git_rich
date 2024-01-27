@@ -101,3 +101,9 @@ void AUE5TopDownARPGGameMode::GetRandQuestion(int QuestionLevel, FQuestionData& 
 
 	UE_LOG(LogUE5TopDownARPG, Log, TEXT("C++: Found %d viable questions, returning one with Unique Name: %s"), AllLevelQuestions.Num(), *Name.ToString());
 }
+
+void AUE5TopDownARPGGameMode::ResetShownQuestions()
+{
+	ShownIds = TSet<FName>();
+	UE_LOG(LogUE5TopDownARPG, Log, TEXT("C++: ShownIds.Num(): %d"), ShownIds.Num());
+}
