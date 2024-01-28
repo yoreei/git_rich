@@ -61,14 +61,6 @@ void AUE5TopDownARPGGameMode::EndGame(bool IsWin)
 	}
 }
 
-
-void AUE5TopDownARPGGameMode::UIWidgetAnswer(int Answer)
-{
-	UE_LOG(LogUE5TopDownARPG, Log, TEXT("You have answered: %d"), Answer); 
-	FQuestionData* Row = QuestionDataTable->FindRow<FQuestionData>("1", "what's this?");
-	ensure(Row);
-}
-
 void AUE5TopDownARPGGameMode::GetRandQuestion(int QuestionLevel, FQuestionData& QuestionData)
 {
 	if (QuestionLevel <= 0)
@@ -107,3 +99,20 @@ void AUE5TopDownARPGGameMode::ResetShownQuestions()
 	ShownIds = TSet<FName>();
 	UE_LOG(LogUE5TopDownARPG, Log, TEXT("C++: ShownIds.Num(): %d"), ShownIds.Num());
 }
+
+bool AUE5TopDownARPGGameMode::SetReward(int32 NewReward)
+{
+	if (NewReward > MaxReward)
+	{
+		UE_LOG(LogUE5TopDownARPG, Error, TEXT("C++: NewReward > MaxReward: (%d > %d)"), NewReward, MaxReward);
+		return false;
+	}
+	CurrentReward = NewReward;
+	return true;
+}
+
+bool AUE5TopDownARPGGameMode::IncrementReward()
+{
+	return SetReward(CurrentReward + 1);
+}
+

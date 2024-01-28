@@ -87,8 +87,8 @@ public:
     /*
     4 >= Answer >= 1
     */
-    UFUNCTION(BlueprintCallable, Category = "GitRich Functions")
-    void UIWidgetAnswer(int Answer);
+    //UFUNCTION(BlueprintCallable, Category = "GitRich Functions")
+    //void UIWidgetAnswer(int Answer);
 
     /*
     Get Random Question
@@ -99,6 +99,14 @@ public:
     UFUNCTION(BlueprintCallable, Category = "GitRich Functions")
     void ResetShownQuestions();
 
+    /*Set New Curren*/
+    UFUNCTION(BlueprintCallable, Category = "GitRich Functions")
+    bool SetReward(int32 NewReward);
+
+    /*Returns: False if error*/
+    UFUNCTION(BlueprintCallable, Category = "GitRich Functions")
+    bool IncrementReward();
+
 public:
     using QuestionKVPair = TTuple<const FName&, const FQuestionData&>;
 
@@ -106,7 +114,13 @@ public:
     UDataTable* QuestionDataTable;
 
     /* Keys of questions already answered */
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = QuestionTable)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GitRichVariables)
     TSet<FName> ShownIds{};
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GitRichVariables)
+    int32 MaxReward = 10;
+
+    UPROPERTY(BlueprintReadOnly, Category = GitRichVariables)
+    int32 CurrentReward = 0;
 };
 
