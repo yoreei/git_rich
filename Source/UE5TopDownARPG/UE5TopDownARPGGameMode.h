@@ -8,6 +8,21 @@
 
 #include "UE5TopDownARPGGameMode.generated.h"
 
+
+UENUM(BlueprintType)
+enum class EGameState : uint8 {
+    GameStart = 0,
+    AskingQuestion,
+    AnswerSuspense,
+    AnswerReveal,
+    AnsweredCorrectly,
+    AnsweredWrong,
+    Win,
+    Lose,
+    CustomCat1,
+    CustomCat2,
+};
+
 /** Structure that defines a level up table entry */
 USTRUCT(BlueprintType)
 struct FQuestionData : public FTableRowBase
@@ -79,6 +94,7 @@ UCLASS(minimalapi)
 class AUE5TopDownARPGGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
+
 public:
 	AUE5TopDownARPGGameMode();
 
@@ -107,6 +123,21 @@ public:
     UFUNCTION(BlueprintCallable, Category = "GitRich Functions")
     bool IncrementReward();
 
+    /*
+    CrowdCheer
+    CrowdGasp
+    Heartbeat_Fast
+    Heartbeat_Medium
+    Heartbeat_Slow
+    MenuAndIntro_Loop
+    MenuAndIntro_Start
+    */
+    UFUNCTION(BlueprintCallable, Category = "GitRich Functions")
+    void PlaySound(const FString& AudioName) const;
+
+    UFUNCTION(BlueprintCallable, Category = "GitRich Functions")
+    void SetGameState(EGameState _GameState);
+
 public:
     using QuestionKVPair = TTuple<const FName&, const FQuestionData&>;
 
@@ -122,5 +153,50 @@ public:
 
     UPROPERTY(BlueprintReadOnly, Category = GitRichVariables)
     int32 CurrentReward = 0;
-};
 
+    UPROPERTY()
+    EGameState CurrentGameState;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GitRichVariables)
+    TArray<FString> GameStartSounds;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GitRichVariables)
+    TArray<FString> AskingQuestionSounds;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GitRichVariables)
+    TArray<FString> AnswerSuspenseSounds;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GitRichVariables)
+    TArray<FString> AnswerRevealSounds;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GitRichVariables)
+    TArray<FString> AnsweredCorrectlySounds;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GitRichVariables)
+    TArray<FString> AnsweredWrongSounds;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GitRichVariables)
+    TArray<FString> WinSounds;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GitRichVariables)
+    TArray<FString> LoseSounds;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GitRichVariables)
+    TArray<FString> CustomCatSounds1;
+
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GitRichVariables)
+    TArray<FString> CustomCatSounds2;
+
+    TArray<TArray<FString>*> Sounds{
+        &GameStartSounds,
+        &AskingQuestionSounds,
+        &AnswerSuspenseSounds,
+        &AnswerRevealSounds,
+        & AnsweredCorrectlySounds,
+        & AnsweredWrongSounds,
+        & WinSounds,
+        & LoseSounds,
+        & CustomCatSounds1,
+        & CustomCatSounds2,
+    };
+};
