@@ -3,8 +3,12 @@
 #include "UE5TopDownARPGGameMode.h"
 #include "UE5TopDownARPGPlayerController.h"
 #include "UE5TopDownARPGCharacter.h"
-#include "UObject/ConstructorHelpers.h"
 #include "UE5TopDownARPG.h"
+
+#include "Kismet/GameplayStatics.h"
+#include "UObject/ConstructorHelpers.h"
+#include "CoreMinimal.h"
+#include "Containers/Map.h"
 
 AUE5TopDownARPGGameMode::AUE5TopDownARPGGameMode()
 {
@@ -114,5 +118,40 @@ bool AUE5TopDownARPGGameMode::SetReward(int32 NewReward)
 bool AUE5TopDownARPGGameMode::IncrementReward()
 {
 	return SetReward(CurrentReward + 1);
+}
+
+void AUE5TopDownARPGGameMode::PlaySound(const FString& AudioName) const
+{
+	UWorld* World = GetWorld();
+	FString SoundString = TEXT("/Script/Engine.SoundWave'/Game/AudioDesign/" + AudioName + "." + AudioName + "'");
+	auto Obj = StaticLoadObject(USoundBase::StaticClass(), nullptr, *SoundString);
+	USoundBase* Sound = Cast<USoundBase>(Obj);
+	UGameplayStatics::PlaySound2D
+	(
+		World,
+		Sound,
+		1.f,
+		1.f,
+		0.f,
+		nullptr,
+		nullptr,
+		true
+	);
+}
+
+void AUE5TopDownARPGGameMode::SetGameState(EGameState NewGameState)
+{
+	CurrentGameState = NewGameState;
+	TArray<FString>* StateSounds = Sounds[static_cast<uint8>(CurrentGameState)];
+	if (StateSounds == nullptr)
+	{
+		UE_LOG(LogUE5TopDownARPG, Warning, TEXT("C++: Could not find sounds array for state: %d"), CurrentGameState);
+		return;
+	}
+
+	for (FString& SoundStr : *StateSounds)
+	{
+		PlaySound(SoundStr);
+	}
 }
 
