@@ -1,14 +1,14 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-#include "Kismet/GameplayStatics.h"
-#include "UObject/ConstructorHelpers.h"
-#include "CoreMinimal.h"
-#include "Containers/Map.h"
-
 #include "UE5TopDownARPGGameMode.h"
 #include "UE5TopDownARPGPlayerController.h"
 #include "UE5TopDownARPGCharacter.h"
 #include "UE5TopDownARPG.h"
+
+#include "Kismet/GameplayStatics.h"
+#include "UObject/ConstructorHelpers.h"
+#include "CoreMinimal.h"
+#include "Containers/Map.h"
 
 AUE5TopDownARPGGameMode::AUE5TopDownARPGGameMode()
 {
